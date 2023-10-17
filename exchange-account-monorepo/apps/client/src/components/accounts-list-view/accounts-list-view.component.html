@@ -1,1 +1,25 @@
-<p>accounts-list-view works!</p>
+<mat-toolbar>
+    <div>Accounts Exchange App</div>
+    <div class="exchange-rate-container">Current exchange rate: $11,250.25</div>
+</mat-toolbar>
+<div>
+    <mat-card class="header-title-card">
+        <mat-card-title>Accounts</mat-card-title>
+        <mat-card-subtitle>Accounts</mat-card-subtitle>
+    </mat-card>
+</div>
+<div>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+          <th mat-header-cell *matHeaderCellDef>
+            {{column.header}}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{column.cell(row)}}
+          </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+</div>
