@@ -1,1 +1,27 @@
-<p>account-detail-view works!</p>
+<button (click)="goBackToList()">Go Back</button>
+
+<div>
+    <mat-card class="header-detail-card"><mat-card-title>{{rowDetail.name}}</mat-card-title>
+        <mat-card-content>BTC: {{rowDetail.btcBalance}}  (${{rowDetail.usdBalance}})</mat-card-content>
+    </mat-card>
+</div>
+
+<div>
+    <mat-card class="table-card">
+        <div class="detail-table-container"> 
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+                <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{column.header}}
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{column.cell(row)}}
+                  </td>
+                </ng-container>
+              
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr  class="account-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+        </div>
+    </mat-card>
+</div>

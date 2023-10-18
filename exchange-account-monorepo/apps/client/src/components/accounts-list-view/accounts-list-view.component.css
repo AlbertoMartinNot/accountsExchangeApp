@@ -1,9 +1,11 @@
-.exchange-rate-container{
-    padding-left: 26em;
+.accounts-list-row{
+    cursor: pointer;
 }
 
-.header-title-card{
-    padding-left: 1.2em;
-    padding-top: 1em;
-    padding-bottom: 1em;
-}
+tr.accounts-list-row:hover {
+    background: whitesmoke;
+  }
+  
+  tr.accounts-list-row:active {
+    background: #efefef;
+  }
