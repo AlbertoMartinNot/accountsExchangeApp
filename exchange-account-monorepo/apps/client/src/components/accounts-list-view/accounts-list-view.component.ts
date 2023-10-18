@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
+import { ExchangeService } from '../../services/exchange.service';
+import { Observable } from 'rxjs';
 
 export interface PeriodicElement {
   name: string;
@@ -56,5 +58,8 @@ export class AccountsListViewComponent {
   ];
   dataSource = ELEMENT_DATA;
   displayedColumns = this.columns.map(c => c.columnDef);
+  lastExchange: Observable<number> = this.exchangeService.getLastExchangeValue();
+
+  constructor(private exchangeService:ExchangeService){}
 }
 

@@ -1,6 +1,6 @@
 <mat-toolbar>
     <div>Accounts Exchange App</div>
-    <div class="exchange-rate-container">Current exchange rate: $11,250.25</div>
+    <div class="exchange-rate-container">Current exchange rate: ${{lastExchange | async}}</div>
 </mat-toolbar>
 <div>
     <mat-card class="header-title-card">

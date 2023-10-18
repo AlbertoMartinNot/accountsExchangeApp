@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ExchangeService } from '../services/exchange.service';
-import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io'
+import {SocketIoModule} from 'ngx-socket-io'
 
 @Component({
   standalone: true,
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   constructor(private exchangeService:ExchangeService){}
 
   ngOnInit(){
-    this.exchangeService.sendMessage();
+    setInterval(this.exchangeService.sendMessage, 25000);
     this.exchangeService.receiveMessage();
   }
 }

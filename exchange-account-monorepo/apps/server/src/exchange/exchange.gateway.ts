@@ -17,7 +17,8 @@ export class ExchangeGateway implements OnGatewayConnection {
 
   handleConnection(socket) {
     socket.on('msgToServer', (data) => {
-        this.server.emit('msgToClient', 'asdasd')
+       const randomExchangeValue = Math.floor(Math.random() * (12000 - 6000 + 1)) + 6000;
+        this.server.emit('msgToClient', randomExchangeValue)
     });
   }
 }
