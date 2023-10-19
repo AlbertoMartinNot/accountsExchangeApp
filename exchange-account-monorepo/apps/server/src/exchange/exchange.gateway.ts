@@ -21,7 +21,7 @@ export class ExchangeGateway implements OnGatewayConnection {
         this.server.emit('updateExchange', randomExchangeValue)
     });
     socket.on('triggerBalance', (data) => {
-      const randomBalanceModifier = Math.floor(Math.random() * (1.6 - 0.5 + 1)) + 0.5;
+      const randomBalanceModifier = Math.floor(Math.random() * (1.6 - 0.9 + 1)) + 0.9;
        this.server.emit('updateBalance', randomBalanceModifier)
    });
   }

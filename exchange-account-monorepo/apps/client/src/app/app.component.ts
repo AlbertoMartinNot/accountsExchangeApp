@@ -31,8 +31,8 @@ export class AppComponent implements OnInit {
         this.checkUrlEndpoint(event.url)
       }
     });
-    setInterval(this.exchangeService.triggerExchange, 8000);
-    setInterval(this.exchangeService.triggerBalance, 12000);
+    setInterval(this.exchangeService.triggerExchange, 20000);
+    setInterval(this.exchangeService.triggerBalance, 32000);
     this.exchangeService.receiveExchange();
     this.exchangeService.receiveBalance();
     this.exchangeService.getLastExchangeValue().subscribe((data)=>{
