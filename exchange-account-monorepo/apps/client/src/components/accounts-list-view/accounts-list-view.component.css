@@ -4,8 +4,22 @@
 
 tr.accounts-list-row:hover {
     background: whitesmoke;
+    border: 1px solid black !important;
   }
   
   tr.accounts-list-row:active {
     background: #efefef;
   }
+
+  .table-card-accounts-list{
+    padding: 2em;
+    margin: 1em;
+    overflow: auto;
+    height: 50em;
+  }
+.mat-footer-row,
+.mat-header-row,
+.mat-row {
+    display: inline-flex;
+    min-width: 100%;
+}

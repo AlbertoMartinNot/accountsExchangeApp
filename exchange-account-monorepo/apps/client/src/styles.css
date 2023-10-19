@@ -1,4 +1,94 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@keyframes higher-value {
+    0% {
+        color: black;
+    }
+    25% {
+        color: green;
+    }
+    50% {
+        color: green;
+    }
+
+    100% {
+        color: black;
+    }
+}
+
+@keyframes lower-value {
+    0% {
+        color: black;
+    }
+    25% {
+        color: red;
+    }
+    50% {
+        color: red;
+    }
+
+    100% {
+        color: black;
+    }
+}
+
+@keyframes higher-value-row {
+    0% {
+        background-color: transparent;
+    }
+    25% {
+        background-color: green;
+    }
+    50% {
+        background-color: green;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+@keyframes lower-value-row {
+    0% {
+        background-color: transparent;
+    }
+    25% {
+        background-color: red;
+    }
+    50% {
+        background-color: red;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.exchange-higher-value {
+    animation-name: higher-value;
+    animation-duration: 5s;
+}
+
+.exchange-lower-value {
+    animation-name: lower-value;
+    animation-duration: 5s;
+}
+
+.row-higher-value {
+    animation-name: higher-value-row;
+    animation-duration: 5s;
+}
+
+.row-lower-value {
+    animation-name: lower-value-row;
+    animation-duration: 5s;
+}

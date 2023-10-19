@@ -4,8 +4,11 @@
 </mat-toolbar>
 <div>
     <mat-card class="header-title-card">
-        <mat-card-title>Accounts</mat-card-title>
-        <mat-card-subtitle>Accounts</mat-card-subtitle>
+        <mat-card-title>{{title}}</mat-card-title>
+        <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
     </mat-card>
+</div>
+<div class="back-button-container" *ngIf="showGoBackButton">
+    <button (click)="backToList()" mat-raised-button color="primary">Go Back</button>
 </div>
 <router-outlet></router-outlet>

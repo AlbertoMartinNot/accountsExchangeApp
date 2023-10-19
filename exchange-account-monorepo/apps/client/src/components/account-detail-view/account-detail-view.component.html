@@ -1,16 +1,14 @@
-<button (click)="goBackToList()">Go Back</button>
-
 <div>
-    <mat-card class="header-detail-card"><mat-card-title class="header-detail-card-title">{{rowData.name}}</mat-card-title>
-        <mat-card-content>BTC Balance: {{rowData.btcBalance}}  (${{rowData.usdBalance}})</mat-card-content>
-        <mat-card-content>Available BTC Balance: {{rowData.avaliableBtcBalance}}  (${{rowData.avaliableUsdBalance}})</mat-card-content>
+    <mat-card class="header-detail-card"><mat-card-title class="header-detail-card-title">{{updatedDetailData.name}}</mat-card-title>
+        <mat-card-content class="balance-text">BTC Balance:   <span [ngClass]="{'exchange-higher-value': updatedDetailData.hasHigherValue && !updatedDetailData.hasLowerValue,'exchange-lower-value' : updatedDetailData.hasLowerValue && !updatedDetailData.hasHigherValue,'': !updatedDetailData.hasHigherValue && !updatedDetailData.hasLowerValue}">{{updatedDetailData.btcBalance}} (${{updatedDetailData.usdBalance}})</span></mat-card-content>
+        <mat-card-content>Available BTC Balance: <span [ngClass]="{'exchange-higher-value': updatedDetailData.hasHigherValue && !updatedDetailData.hasLowerValue,'exchange-lower-value' : updatedDetailData.hasLowerValue && !updatedDetailData.hasHigherValue,'': !updatedDetailData.hasHigherValue && !updatedDetailData.hasLowerValue}">{{updatedDetailData.avaliableBtcBalance}} (${{updatedDetailData.avaliableUsdBalance}})</span></mat-card-content>
     </mat-card>
 </div>
 
 <div>
     <mat-card class="table-card">
         <div class="detail-table-container"> 
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                 <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
                   <th mat-header-cell *matHeaderCellDef>
                     {{column.header}}

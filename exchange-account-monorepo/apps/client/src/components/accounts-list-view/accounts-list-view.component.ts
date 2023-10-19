@@ -21,7 +21,7 @@ export interface Account {
 @Component({
   selector: 'exchange-account-monorepo-accounts-list-view',
   standalone: true,
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatTableModule, MatCardModule],
   templateUrl: './accounts-list-view.component.html',
   styleUrls: ['./accounts-list-view.component.css'],
 })
@@ -50,6 +50,8 @@ export class AccountsListViewComponent {
   ];
   dataSource: any = [];
   displayedColumns = this.columns.map(c => c.columnDef);
+  hasHigherValue = false;
+  hasLowerValue = false;
 
   constructor(private router: Router, private exchangeService: ExchangeService, private accountsService: AccountsService) {
 
@@ -59,10 +61,10 @@ export class AccountsListViewComponent {
     this.accountsService.getAccounts().subscribe((data: any) => {
       this.dataSource = data;
       this.exchangeService.getLastExchangeValue().subscribe((value) => {
-        this.transformRowValues(value, 0);
+        this.transformRowValues(value);
       })
       this.exchangeService.getLastBalanceValue().subscribe((value) => {
-        this.transformRowValues(0, value);
+        this.setRandomizeNewBalanceValue(value);
       })
     });
 
@@ -72,19 +74,34 @@ export class AccountsListViewComponent {
     this.router.navigateByUrl('/detail', { state: rowData })
   }
 
-  transformRowValues(newExchangeValue: number, newBalanceValue: number) {
-    if (newExchangeValue === 0) {
-      for (const row of this.dataSource) {
-        row.btcBalance = (row.btcBalance * newBalanceValue).toFixed(5);
-        row.avaliableBtcBalance = (row.avaliableBtcBalance * newBalanceValue).toFixed(5);
-        row.usdBalance = (row.usdBalance * newBalanceValue).toFixed(2);
-        row.avaliableUsdBalance = (row.avaliableUsdBalance * newBalanceValue).toFixed(2)
-      }
-    } else {
-      for (const row of this.dataSource) {
+  transformRowValues(newExchangeValue: number) {
+   for (const row of this.dataSource) {
         row.usdBalance = (row.btcBalance * newExchangeValue).toFixed(2);
         row.avaliableUsdBalance = (row.avaliableBtcBalance * newExchangeValue).toFixed(2)
       }
+  }
+
+  setHigherOrLowerClassRow(newExchangeValue:number,row:any){
+    if((row.usdBalance * newExchangeValue) > row.usdBalance){
+      row.hasHigherValue = true;
+      row.hasLowerValue = false;
+    }else if((row.usdBalance * newExchangeValue) < row.usdBalance){
+      row.hasHigherValue = false;
+      row.hasLowerValue = true;
+    }else{
+      row.hasHigherValue = false;
+      row.hasLowerValue = false;
+    }
+  }
+
+  setRandomizeNewBalanceValue(newBalanceValue:number){
+    for(const row of this.dataSource){
+      const randomBalanceValue = (Math.floor(Math.random() * (newBalanceValue - 0.4 + 1)) + 0.4);
+      this.setHigherOrLowerClassRow(randomBalanceValue,row)
+      row.btcBalance = (row.btcBalance * randomBalanceValue).toFixed(5);
+      row.avaliableBtcBalance = (row.avaliableBtcBalance * randomBalanceValue).toFixed(5);
+      row.usdBalance = (row.usdBalance * randomBalanceValue).toFixed(2);
+      row.avaliableUsdBalance = (row.avaliableUsdBalance * randomBalanceValue).toFixed(2)
     }
   }
 }

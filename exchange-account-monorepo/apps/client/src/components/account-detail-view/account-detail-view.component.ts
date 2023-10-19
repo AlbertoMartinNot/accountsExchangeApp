@@ -22,7 +22,7 @@ const ELEMENT_DATA: Transaction[] = [];
 @Component({
   selector: 'exchange-account-monorepo-account-detail-view',
   standalone: true,
-  imports: [CommonModule,MatTableModule,MatCardModule],
+  imports: [CommonModule, MatTableModule, MatCardModule],
   templateUrl: './account-detail-view.component.html',
   styleUrls: ['./account-detail-view.component.css'],
 })
@@ -51,56 +51,81 @@ export class AccountDetailViewComponent implements OnInit {
     {
       columnDef: 'debitBtc',
       header: 'Debit',
-      cell: (element: Transaction) => element.debitBtc ? `BTC ${element.debitBtc}` + `/ $ ${element.debitUsd}`: '',
+      cell: (element: Transaction) => element.debitBtc ? `BTC ${element.debitBtc}` + ` / $ ${element.debitUsd}` : '',
     },
     {
       columnDef: 'creditBtc',
       header: 'Credit',
-      cell: (element: Transaction) => element.creditBtc ? `BTC ${element.creditBtc}` + `/ $ ${element.creditUsd}`: '',
+      cell: (element: Transaction) => element.creditBtc ? `BTC ${element.creditBtc}` + ` / $ ${element.creditUsd}` : '',
     },
     {
       columnDef: 'balanceBtc',
       header: 'Balance',
-      cell: (element: Transaction) => `BTC ${element.balanceBtc}` + `/ $ ${element.balanceUsd}`,
+      cell: (element: Transaction) => `BTC ${element.balanceBtc}` + ` / $ ${element.balanceUsd}`,
     },
   ];
   dataSource = ELEMENT_DATA;
   displayedColumns = this.columns.map(c => c.columnDef);
 
-  rowData:any = {}
+  detailData: any = {}
+  updatedDetailData: any = {}
 
   updatedBalance = 0;
 
-  constructor(private exchangeService:ExchangeService){}
+  constructor(private exchangeService: ExchangeService) { }
 
   ngOnInit() {
-    this.rowData=history.state;
+    this.detailData = history.state;
     this.exchangeService.getLastExchangeValue().subscribe((value) => {
+      this.updatedDetailData = {};
       this.transformTransactionsData(value);
     })
-    /* this.exchangeService.getLastBalanceValue().subscribe((value) => {
-      this.transformRowValues(0, value);
-    }) */
-    this.dataSource = this.rowData.transactions;
+    this.exchangeService.getLastBalanceValue().subscribe((value) => {
+      this.updatedDetailData = {};
+      this.detailData.hasHigherValue = false;
+      this.detailData.hasLowerValue = false;
+      this.setNewBalanceValue(value);
+    })
+    this.dataSource = this.detailData.transactions;
   }
-  goBackToList(){
+  goBackToList() {
     history.back();
   }
 
-  transformTransactionsData(newExchangeRate:number){
-    this.rowData.usdBalance = (this.rowData.btcBalance * newExchangeRate).toFixed(2);
-    this.rowData.avaliableUsdBalance = (this.rowData.avaliableBtcBalance * newExchangeRate).toFixed(2);
-    this.rowData.transactions.forEach((item:any) => {
+  transformTransactionsData(newExchangeRate: number) {
+    this.detailData.usdBalance = (this.detailData.btcBalance * newExchangeRate).toFixed(2);
+    this.detailData.avaliableUsdBalance = (this.detailData.avaliableBtcBalance * newExchangeRate).toFixed(2);
+    this.detailData.transactions.forEach((item: any) => {
       if (item.debitBtc) {
-          item.debitUsd = (item.debitBtc * newExchangeRate).toFixed(2);
+        item.debitUsd = (item.debitBtc * newExchangeRate).toFixed(2);
       }
       if (item.creditBtc) {
         item.creditUsd = (item.creditBtc * newExchangeRate).toFixed(2);
-    }
-    if (item.balanceBtc) {
-      item.balanceUsd = (item.balanceBtc * newExchangeRate).toFixed(2);
+      }
+      if (item.balanceBtc) {
+        item.balanceUsd = (item.balanceBtc * newExchangeRate).toFixed(2);
+      }
+    });
+    this.updatedDetailData = this.detailData;
   }
-  });
+  setNewBalanceValue(newBalanceValue:number){
+      const randomBalanceValue = (Math.floor(Math.random() * (newBalanceValue - 0.4 + 1)) + 0.4);
+      this.setHigherOrLowerClassRow(randomBalanceValue)
+      this.detailData.btcBalance = (this.detailData.btcBalance * randomBalanceValue).toFixed(5);
+      this.detailData.avaliableBtcBalance = (this.detailData.avaliableBtcBalance * randomBalanceValue).toFixed(5);
+      this.updatedDetailData = this.detailData;
   }
 
+  setHigherOrLowerClassRow(newExchangeValue:number){
+    if((this.detailData.btcBalance * newExchangeValue) > this.detailData.btcBalance){
+      this.detailData.hasHigherValue = true;
+      this.detailData.hasLowerValue = false;
+    }else if((this.detailData.btcBalance * newExchangeValue) < this.detailData.btcBalance){
+      this.detailData.hasHigherValue = false;
+      this.detailData.hasLowerValue = true;
+    }else{
+      this.detailData.hasHigherValue = false;
+      this.detailData.hasLowerValue = false;
+    }
+  }
 }
