@@ -50,8 +50,6 @@ export class AccountsListViewComponent {
   ];
   dataSource: any = [];
   displayedColumns = this.columns.map(c => c.columnDef);
-  hasHigherValue = false;
-  hasLowerValue = false;
 
   constructor(private router: Router, private exchangeService: ExchangeService, private accountsService: AccountsService) {
 

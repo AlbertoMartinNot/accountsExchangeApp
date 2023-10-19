@@ -78,6 +78,8 @@ export class AccountDetailViewComponent implements OnInit {
     this.detailData = history.state;
     this.exchangeService.getLastExchangeValue().subscribe((value) => {
       this.updatedDetailData = {};
+      this.detailData.hasHigherValue = false;
+      this.detailData.hasLowerValue = false;
       this.transformTransactionsData(value);
     })
     this.exchangeService.getLastBalanceValue().subscribe((value) => {
@@ -106,7 +108,7 @@ export class AccountDetailViewComponent implements OnInit {
         item.balanceUsd = (item.balanceBtc * newExchangeRate).toFixed(2);
       }
     });
-    this.updatedDetailData = this.detailData;
+    this.updatedDetailData = {...this.detailData};
   }
   setNewBalanceValue(newBalanceValue:number){
       const randomBalanceValue = (Math.floor(Math.random() * (newBalanceValue - 0.4 + 1)) + 0.4);
