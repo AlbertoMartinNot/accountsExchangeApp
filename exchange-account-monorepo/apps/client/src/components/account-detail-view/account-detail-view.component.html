@@ -1,8 +1,9 @@
 <button (click)="goBackToList()">Go Back</button>
 
 <div>
-    <mat-card class="header-detail-card"><mat-card-title>{{rowDetail.name}}</mat-card-title>
-        <mat-card-content>BTC: {{rowDetail.btcBalance}}  (${{rowDetail.usdBalance}})</mat-card-content>
+    <mat-card class="header-detail-card"><mat-card-title class="header-detail-card-title">{{rowData.name}}</mat-card-title>
+        <mat-card-content>BTC Balance: {{rowData.btcBalance}}  (${{rowData.usdBalance}})</mat-card-content>
+        <mat-card-content>Available BTC Balance: {{rowData.avaliableBtcBalance}}  (${{rowData.avaliableUsdBalance}})</mat-card-content>
     </mat-card>
 </div>
 

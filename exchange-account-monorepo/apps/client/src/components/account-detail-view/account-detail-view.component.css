@@ -1,14 +1,18 @@
-.detail-table-container{
+.detail-table-container {
     padding-left: 5em;
     padding-right: 5em;
     padding-top: 2em;
     padding-bottom: 2em;
-    }
-    
-    .table-card{
-     margin: 1em;
-    }
-    
-    .header-detail-card{
-        margin: 1em;
-    }
+}
+
+.table-card {
+    margin: 1em;
+}
+
+.header-detail-card {
+    margin: 1em;
+}
+
+.header-detail-card-title{
+    padding-left: 0.75em;
+}

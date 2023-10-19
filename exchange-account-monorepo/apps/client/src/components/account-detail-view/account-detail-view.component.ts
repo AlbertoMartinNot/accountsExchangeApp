@@ -2,28 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute } from '@angular/router';
 import { ExchangeService } from '../../services/exchange.service';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+export interface Transaction {
+  confirmedDate: string;
+  orderId: number;
+  orderCode: number;
+  transactionType: string;
+  debitBtc: number;
+  debitUsd: number;
+  creditBtc: number;
+  creditUsd: number;
+  balanceBtc: number;
+  balanceUsd: number;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+const ELEMENT_DATA: Transaction[] = [];
 
 @Component({
   selector: 'exchange-account-monorepo-account-detail-view',
@@ -35,38 +29,78 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class AccountDetailViewComponent implements OnInit {
   columns = [
     {
-      columnDef: 'position',
-      header: 'No.',
-      cell: (element: PeriodicElement) => `${element.position}`,
+      columnDef: 'confirmedDate',
+      header: 'Confirmed Date',
+      cell: (element: Transaction) => `${element.confirmedDate}`,
     },
     {
-      columnDef: 'name',
-      header: 'Name',
-      cell: (element: PeriodicElement) => `${element.name}`,
+      columnDef: 'orderId',
+      header: 'Order ID',
+      cell: (element: Transaction) => `${element.orderId}`,
     },
     {
-      columnDef: 'weight',
-      header: 'Weight',
-      cell: (element: PeriodicElement) => `${element.weight}`,
+      columnDef: 'orderCode',
+      header: 'Order Code',
+      cell: (element: Transaction) => `${element.orderCode}`,
     },
     {
-      columnDef: 'symbol',
-      header: 'Symbol',
-      cell: (element: PeriodicElement) => `${element.symbol}`,
+      columnDef: 'transactionType',
+      header: 'Transaction Type',
+      cell: (element: Transaction) => `${element.transactionType}`,
+    },
+    {
+      columnDef: 'debitBtc',
+      header: 'Debit',
+      cell: (element: Transaction) => element.debitBtc ? `BTC ${element.debitBtc}` + `/ $ ${element.debitUsd}`: '',
+    },
+    {
+      columnDef: 'creditBtc',
+      header: 'Credit',
+      cell: (element: Transaction) => element.creditBtc ? `BTC ${element.creditBtc}` + `/ $ ${element.creditUsd}`: '',
+    },
+    {
+      columnDef: 'balanceBtc',
+      header: 'Balance',
+      cell: (element: Transaction) => `BTC ${element.balanceBtc}` + `/ $ ${element.balanceUsd}`,
     },
   ];
   dataSource = ELEMENT_DATA;
   displayedColumns = this.columns.map(c => c.columnDef);
 
-  rowDetail:any = {}
+  rowData:any = {}
+
+  updatedBalance = 0;
 
   constructor(private exchangeService:ExchangeService){}
 
   ngOnInit() {
-    this.rowDetail=history.state;
+    this.rowData=history.state;
+    this.exchangeService.getLastExchangeValue().subscribe((value) => {
+      this.transformTransactionsData(value);
+    })
+    /* this.exchangeService.getLastBalanceValue().subscribe((value) => {
+      this.transformRowValues(0, value);
+    }) */
+    this.dataSource = this.rowData.transactions;
   }
   goBackToList(){
     history.back();
+  }
+
+  transformTransactionsData(newExchangeRate:number){
+    this.rowData.usdBalance = (this.rowData.btcBalance * newExchangeRate).toFixed(2);
+    this.rowData.avaliableUsdBalance = (this.rowData.avaliableBtcBalance * newExchangeRate).toFixed(2);
+    this.rowData.transactions.forEach((item:any) => {
+      if (item.debitBtc) {
+          item.debitUsd = (item.debitBtc * newExchangeRate).toFixed(2);
+      }
+      if (item.creditBtc) {
+        item.creditUsd = (item.creditBtc * newExchangeRate).toFixed(2);
+    }
+    if (item.balanceBtc) {
+      item.balanceUsd = (item.balanceBtc * newExchangeRate).toFixed(2);
+  }
+  });
   }
 
 }
